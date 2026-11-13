@@ -23,3 +23,8 @@ create policy tabel_payments_all on public.tabel_payments for all to anon, authe
 create index if not exists tabel_days_day_idx on public.tabel_days(day);
 create index if not exists tabel_payments_month_idx on public.tabel_payments(month);
 notify pgrst, 'reload schema';
+create table if not exists public.tabel_notes(day date primary key, note text not null default '', updated_at timestamptz not null default now());
+alter table public.tabel_notes enable row level security;
+drop policy if exists tabel_notes_all on public.tabel_notes;
+create policy tabel_notes_all on public.tabel_notes for all to anon, authenticated using (public.tabel_ok()) with check (public.tabel_ok());
+notify pgrst, 'reload schema';
