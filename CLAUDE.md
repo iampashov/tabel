@@ -17,3 +17,5 @@ Single-file static web app (`index.html`, vanilla JS, no build) for a constructi
 - python3 urllib fails with SSL cert error on this Mac → use curl for the Management API.
 - Deleting a worker cascades to their days and payments (confirmed in-page).
 - Rates are per worker (default 65 / 33). Changing a rate recalculates past months too (no rate history).
+- `tabel_notes(day pk, note)`: one shared note per day (обект/бележка). Day view input, recent-notes chips, calendar pins, month/week lists.
+- LIVE DATA since 13.11.2026 ~17:30 (real workers Георги, Тилчо, …). When testing against the live DB: create a row named "Тест …", delete it by its exact id/name, NEVER range deletes (`day=gte.…`) or table-wide cleanups.
