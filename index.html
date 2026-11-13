@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Табел на бригадата</title>
+<title>Бригада</title>
 <meta name="description" content="Присъствие на бригадата по дни, седмични надници и месечни заплати.">
 <meta name="theme-color" content="#F05A0E">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Табел">
+<meta name="apple-mobile-web-app-title" content="Бригада">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%23F05A0E'/%3E%3Cpath d='M5 19h14M7 19V9.5l5-3.5 5 3.5V19M10.5 19v-4h3v4' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -219,7 +219,7 @@ tr.total td:first-child{background:var(--surface2)}
 <body>
 <header class="top">
   <div class="in">
-    <div class="brand"><span class="mark"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V9l6-4 6 4v11M10 20v-5h4v5"/></svg></span>Табел</div>
+    <div class="brand"><span class="mark"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V9l6-4 6 4v11M10 20v-5h4v5"/></svg></span>Бригада</div>
     <div class="state" id="state"><i></i><span>Зареждане</span></div>
   </div>
 </header>
@@ -422,7 +422,7 @@ function emptyTeam(){
   return `<div class="card empty"><h2>Няма добавени работници</h2><p>Добавете хората от бригадата и надниците им. След това отбелязвате всеки ден с едно докосване.</p><button class="btn primary" data-act="add-worker">${ICON.plus} Добави работник</button></div>`;
 }
 function viewLock(){
-  return `<div class="lock"><form class="card" id="lockform" data-act="noop"><div class="mark">${ICON.lock}</div><h1>Табел на бригадата</h1><p>Въведете кода на фирмата, за да отворите табела на това устройство.</p>
+  return `<div class="lock"><form class="card" id="lockform" data-act="noop"><div class="mark">${ICON.lock}</div><h1>Бригада</h1><p>Въведете кода на фирмата, за да отворите табела на това устройство.</p>
   <div class="field"><input type="password" id="pin" inputmode="numeric" autocomplete="one-time-code" placeholder="••••••" aria-label="Код за достъп" required></div>
   <div class="ferr" id="lockerr" ${S.err?'':'hidden'}>${esc(S.err||'')}</div>
   <button class="btn primary block" type="submit" id="lockbtn">Отвори</button></form></div>`;
