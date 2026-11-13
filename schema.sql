@@ -1,0 +1,25 @@
+create table if not exists public.tabel_config(key text primary key, value text not null);
+insert into public.tabel_config(key,value) values('pin','CHANGE_ME') on conflict (key) do update set value=excluded.value;
+alter table public.tabel_config enable row level security;
+create or replace function public.tabel_ok() returns boolean language sql stable security definer set search_path=public as $$
+  select coalesce(current_setting('request.headers', true)::json->>'x-tabel-key','') = (select value from public.tabel_config where key='pin');
+$$;
+revoke all on function public.tabel_ok() from public;
+grant execute on function public.tabel_ok() to anon, authenticated;
+create or replace function public.tabel_check_pin() returns boolean language sql stable security definer set search_path=public as $$ select public.tabel_ok(); $$;
+grant execute on function public.tabel_check_pin() to anon, authenticated;
+create table if not exists public.tabel_workers(id text primary key, name text not null, rate_full numeric not null default 65, rate_half numeric not null default 33, active boolean not null default true, sort int not null default 0, created_at timestamptz not null default now());
+create table if not exists public.tabel_days(worker_id text not null references public.tabel_workers(id) on delete cascade, day date not null, status text not null check (status in ('full','half','off')), updated_at timestamptz not null default now(), primary key(worker_id, day));
+create table if not exists public.tabel_payments(id text primary key, worker_id text not null references public.tabel_workers(id) on delete cascade, month text not null, amount numeric not null, paid_on date not null default current_date, note text not null default '', created_at timestamptz not null default now());
+alter table public.tabel_workers enable row level security;
+alter table public.tabel_days enable row level security;
+alter table public.tabel_payments enable row level security;
+drop policy if exists tabel_workers_all on public.tabel_workers;
+drop policy if exists tabel_days_all on public.tabel_days;
+drop policy if exists tabel_payments_all on public.tabel_payments;
+create policy tabel_workers_all on public.tabel_workers for all to anon, authenticated using (public.tabel_ok()) with check (public.tabel_ok());
+create policy tabel_days_all on public.tabel_days for all to anon, authenticated using (public.tabel_ok()) with check (public.tabel_ok());
+create policy tabel_payments_all on public.tabel_payments for all to anon, authenticated using (public.tabel_ok()) with check (public.tabel_ok());
+create index if not exists tabel_days_day_idx on public.tabel_days(day);
+create index if not exists tabel_payments_month_idx on public.tabel_payments(month);
+notify pgrst, 'reload schema';
